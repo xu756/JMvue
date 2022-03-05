@@ -43,7 +43,7 @@ module.exports = {
 
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8000/api', // 要访问的接口域名
+        target: 'http://127.0.0.1:8000/', // 要访问的接口域名
         ws: true, // 是否启用websockets
         changeOrigin: true,
         pathRewrite: {
