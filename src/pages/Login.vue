@@ -87,13 +87,13 @@ export default {
         if (valid && this.yzm == this.Yzm) {
           const { data: res } = await this.$http.post("login", this.LoginFrom);
           console.log(res);
-          if (res.meta.code !== 200) {
-            this.$message(res.meta.msg);
-          } else {
+          if (res.meta.code == 200) {
             this.$message({ message: res.meta.msg, type: "success" });
             window.sessionStorage.setItem("token", res.data.token);
             window.sessionStorage.setItem("userID", res.data.id);
             this.$router.push("/");
+          } else {
+            this.$message(res.meta.msg);
           }
         } else {
           this.$message.error("请重新输入登录信息");

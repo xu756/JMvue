@@ -47,7 +47,7 @@ def login(request):
             code = 200
         else:
             msg = "账号密码错误"
-            code = 200
+            code = 400
     else:
         msg = "请求错误"
         code = 400
