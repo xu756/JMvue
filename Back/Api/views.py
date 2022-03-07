@@ -35,14 +35,15 @@ def login(request):
             username=getres['username'], password=getres['password']).exists()
         if login_in:
             UserData = User.objects.filter(
-                username=getres['username'], password=getres['password']).values('id','username', 'rid','LoginTime').first()
-            token=hashlib.sha1(os.urandom(40)).hexdigest()
+                username=getres['username'], password=getres['password']).values('id', 'username', 'rid', 'LoginTime').first()
+            token = hashlib.sha1(os.urandom(40)).hexdigest()
             data['token'] = token
             data['username'] = getres['username']
             data['rid'] = UserData['rid']
-            data['LoginTime']=UserData['LoginTime']
-            data['id']=UserData['id']
-            User.objects.filter(username=getres['username'],password=getres['password']).update(token=token,LoginTime=datetime.datetime.now())
+            data['LoginTime'] = UserData['LoginTime']
+            data['id'] = UserData['id']
+            User.objects.filter(username=getres['username'], password=getres['password']).update(
+                token=token, LoginTime=datetime.datetime.now(), isLogin=True)
             msg = "请求成功"
             code = 200
         else:
@@ -53,6 +54,53 @@ def login(request):
         code = 400
     res['data'] = data
     meta['msg'] = msg
-    meta['code'] = code 
+    meta['code'] = code
+    res['meta'] = meta
+    return JsonResponse(res, json_dumps_params={'ensure_ascii': False})
+
+
+def islogin(request):
+    res, data, meta = {}, {}, {}
+    if (request.method == "POST"):
+        getres = json.loads(request.body)
+        is_login = User.objects.filter(
+            id=getres['id'], token=getres['token']).exists()
+        if is_login:
+            LoginData = User.objects.filter(
+                id=getres['id'], token=getres['token']).values('isLogin').first()
+            if LoginData['isLogin']:
+                msg = "正确登录"
+                code = 200
+
+            else:
+                msg = "请重新登录"
+                code = 500
+        else:
+            msg = "请登录"
+            code = 400
+    else:
+        msg = "请求错误"
+        code = 400
+    res['data'] = data
+    meta['msg'] = msg
+    meta['code'] = code
+    res['meta'] = meta
+    return JsonResponse(res, json_dumps_params={'ensure_ascii': False})
+
+
+def loginout(request):
+    res, data, meta = {}, {}, {}
+    if (request.method == "POST"):
+        getres = json.loads(request.body)
+        User.objects.filter(
+            id=getres['id']).update(isLogin=False)
+        msg = "成功退出"
+        code = 200
+    else:
+        msg = "请求错误"
+        code = 400
+    res['data'] = data
+    meta['msg'] = msg
+    meta['code'] = code
     res['meta'] = meta
     return JsonResponse(res, json_dumps_params={'ensure_ascii': False})

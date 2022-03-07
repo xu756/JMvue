@@ -11,7 +11,7 @@ class User(models.Model):  # 用户
     token = models.CharField(verbose_name="token令牌", max_length=128)
     CreatTime = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
     LoginTime = models.DateTimeField(verbose_name="最后登录时间", auto_now=True)
-
+    isLogin=models.BooleanField(verbose_name="登录状态",default=False)
     class Meta:
         verbose_name_plural = '用户管理'
 

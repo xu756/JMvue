@@ -6,7 +6,17 @@ Vue.use(VueRouter)
 const routes = [{
     path: '/',
     name: 'index',
-    component: () => import('../pages/index.vue')
+    redirect:'/index',
+    component: () => import('../pages/index.vue'),
+    children:[{
+      path: '/index',
+      name: 'home',
+      component: () => import('../components/index.vue')
+    },{
+      path: '/myproject',
+      name: 'myproject',
+      component: () => import('../components/project/myproject.vue')
+    }]
   },
   {
     path: '/login',

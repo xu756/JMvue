@@ -2,21 +2,15 @@
   <el-container>
     <el-aside width="200px">
       <el-menu default-active="2" class="el-menu-vertical-demo">
-        <el-menu-item index="0">
+        <el-menu-item index="0" @click="routerTo('/index')">
           <i class="el-icon-menu"></i>
           <span slot="title">首页</span>
         </el-menu-item>
-        <el-submenu index="1">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>数据</span>
-          </template>
-          <el-submenu index="1-4">
-            <template slot="title">数据列表</template>
-            <el-menu-item index="1-4-1">
-              <i class="el-icon-menu"></i>选项1
-            </el-menu-item>
-          </el-submenu>
+        <el-submenu index="1-4">
+          <template slot="title">项目列表</template>
+          <el-menu-item index="1-4-1" @click="routerTo('/myproject')">
+            <i class="el-icon-menu"></i>我的项目
+          </el-menu-item>
         </el-submenu>
         <el-menu-item index="2">
           <i class="el-icon-menu"></i>
@@ -29,8 +23,13 @@
       </el-menu>
     </el-aside>
     <el-container>
-      <el-header>Header</el-header>
-      <el-main>Main</el-main>
+      <el-header>
+        <div></div>
+        <div>
+          <el-button type="info" @click="loginout">退出按钮</el-button>
+        </div>
+      </el-header>
+      <el-main><router-view /></el-main>
     </el-container>
   </el-container>
 </template>
@@ -38,23 +37,46 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      name: 544,
+    };
   },
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+    /*退出 */
+    loginout() {
+      window.sessionStorage.clear();
+      this.$http.post("loginout", {
+        id: window.sessionStorage.getItem("userID"),
+        token: window.sessionStorage.getItem("token"),
+      });
+      this.$router.push("/login");
     },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+    /*子路由*/
+    routerTo(path) {
+      this.$router.push(path);
+    },
+     async islogin() {
+      var { data: s } = await this.$http.post("islogin", {
+        id: window.sessionStorage.getItem("userID"),
+        token: window.sessionStorage.getItem("token"),
+      });
+      if (s.meta.code == 400) {
+        this.$message({ message: s.meta.msg, type: "error" });
+        this.$router.push("/login");
+        clearInterval(this.sh);
+      }
     },
   },
+  created() {
+    setInterval(this.islogin, 10000);
+  },
+  
 };
 </script>
 <style lang="scss">
 .el-form-item__content {
   line-height: 0 !important;
 }
-
 .iconfont {
   padding-right: 15px;
 }
@@ -62,20 +84,6 @@ export default {
 .home-container {
   height: 100%;
 }
-
-.double_click {
-  /*取消双击*/
-  -moz-user-select: none;
-  /*火狐*/
-  -webkit-user-select: none;
-  /*webkit浏览器*/
-  -ms-user-select: none;
-  /*IE10*/
-  -khtml-user-select: none;
-  /*早期浏览器*/
-  user-select: none;
-}
-
 //头部
 .el-header {
   background-image: linear-gradient(to left, #fff1eb 0%, #ace0f9 90%);

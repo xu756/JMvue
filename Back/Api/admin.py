@@ -4,9 +4,7 @@ from .models import *
 
 #用户
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'rid')
-
-
+    list_display = ('id', 'username', 'rid','isLogin')
 admin.site.register(User, UserAdmin)
 #项目
 class UserprojectAdmin(admin.ModelAdmin):

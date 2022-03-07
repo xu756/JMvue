@@ -4,5 +4,7 @@ from Api import views
 urlpatterns = [
     path('',views.index),
     path('admin/', admin.site.urls),
-    path('api/login',views.login)
+    path('api/login',views.login),
+    path('api/islogin',views.islogin),
+    path('api/loginout',views.loginout),
 ]
