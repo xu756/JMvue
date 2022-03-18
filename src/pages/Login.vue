@@ -4,12 +4,7 @@
       <div id="LoginBoxlogo">
         <img src="../assets/logo.png" />
       </div>
-      <el-form
-        ref="LoginFormref"
-        :model="LoginFrom"
-        class="login_form"
-        :rules="LoginForm_rules"
-      >
+      <el-form ref="LoginFormref" :model="LoginFrom" class="login_form" :rules="LoginForm_rules">
         <el-form-item prop="username">
           <el-input
             v-model="LoginFrom.username"
@@ -18,19 +13,11 @@
           ></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input
-            v-model="LoginFrom.password"
-            prefix-icon="iconfont icon-mima"
-            placeholder="密码"
-          ></el-input>
+          <el-input v-model="LoginFrom.password" prefix-icon="iconfont icon-mima" placeholder="密码"></el-input>
         </el-form-item>
         <el-form-item>
           <v-sidentify @GetYzm="GetYzm" ref="ReGetYzm"></v-sidentify>
-          <el-input
-            class="YzmBox"
-            v-model="yzm"
-            placeholder="验证码"
-          ></el-input>
+          <el-input class="YzmBox" v-model="yzm" placeholder="验证码"></el-input>
         </el-form-item>
         <el-form-item class="login_form_button">
           <el-button type="success" @click="LoginSubmit()">登录</el-button>
@@ -86,7 +73,6 @@ export default {
         this.yzm = this.Yzm; //登录不用验证码
         if (valid && this.yzm == this.Yzm) {
           const { data: res } = await this.$http.post("login", this.LoginFrom);
-          console.log(res);
           if (res.meta.code == 200) {
             this.$message({ message: res.meta.msg, type: "success" });
             window.sessionStorage.setItem("token", res.data.token);
