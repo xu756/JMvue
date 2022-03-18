@@ -6,16 +6,26 @@ Vue.use(VueRouter)
 const routes = [{
     path: '/',
     name: 'index',
-    redirect:'/index',
+    redirect: '/index',
     component: () => import('../pages/index.vue'),
-    children:[{
+    children: [{
       path: '/index',
       name: 'home',
       component: () => import('../components/index.vue')
-    },{
-      path: '/myproject',
-      name: 'myproject',
-      component: () => import('../components/project/myproject.vue')
+    }, {
+      path: '/project',
+      name: 'project',
+      redirect: '/project/list',
+      component: () => import('../components/project/index.vue'),
+      children: [{
+        path: 'list',
+        name: 'projectlist',
+        component: () => import('../components/project/list.vue'),
+      }, {
+        path: "id=:id",
+        name: "project_children",
+        component: () => import('../components/project/children.vue')
+      }]
     }]
   },
   {
@@ -23,9 +33,16 @@ const routes = [{
     name: 'login',
     component: () => import('../pages/Login.vue')
   },
+  {
+    //错误页面
+    path: '*',
+    component: () => import('../pages/error.vue')
+  },
 ]
 
 const router = new VueRouter({
+    //mode: 'history',
+  /*删除 # 号 */
   routes
 })
 
