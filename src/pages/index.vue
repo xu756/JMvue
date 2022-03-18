@@ -2,13 +2,13 @@
   <el-container>
     <el-aside width="200px">
       <el-menu default-active="2" class="el-menu-vertical-demo">
-        <el-menu-item index="0" @click="routerTo('/index')">
+        <el-menu-item index="1" @click="routerTo('/index')">
           <i class="el-icon-menu"></i>
           <span slot="title">首页</span>
         </el-menu-item>
         <el-submenu index="1-4">
           <template slot="title">项目列表</template>
-          <el-menu-item index="1-4-1" @click="routerTo('/myproject')">
+          <el-menu-item index="1-4-1" @click="routerTo('/project')">
             <i class="el-icon-menu"></i>我的项目
           </el-menu-item>
         </el-submenu>
@@ -29,7 +29,9 @@
           <el-button type="info" @click="loginout">退出按钮</el-button>
         </div>
       </el-header>
-      <el-main><router-view /></el-main>
+      <el-main>
+        <router-view />
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -55,7 +57,7 @@ export default {
     routerTo(path) {
       this.$router.push(path);
     },
-     async islogin() {
+    async islogin() {
       var { data: s } = await this.$http.post("islogin", {
         id: window.sessionStorage.getItem("userID"),
         token: window.sessionStorage.getItem("token"),
@@ -70,7 +72,6 @@ export default {
   created() {
     setInterval(this.islogin, 10000);
   },
-  
 };
 </script>
 <style lang="scss">
@@ -114,7 +115,6 @@ export default {
   height: 100%;
   position: relative;
   background-image: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
-  z-index: 0;
 
   //不显示滚动条
   &::-webkit-scrollbar {
